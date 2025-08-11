@@ -29,7 +29,7 @@ def show_top():
     center_frame = tk.Frame(root)
     center_frame.pack(expand=True, pady=20)
 
-    # ボタンとラベルを配置
+    # ボタン、ラベルを配置
     btn_info = [
         ("材料登録", lambda: show_material_input(root, show_top, header, footer)),
         ("材料一覧・編集", lambda: show_material_list(root, show_top, header, footer)),
