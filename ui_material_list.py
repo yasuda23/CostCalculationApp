@@ -33,7 +33,6 @@ def show_material_list(root, show_top, header, footer):
         end = start + PAGE_SIZE
         for values in filtered_materials[start:end]:
             add_row(values)
-        page_label.config(text=f"{current_page[0]+1} / {max(1, (len(filtered_materials)-1)//PAGE_SIZE+1)}")
 
     def next_page():
         if (current_page[0]+1)*PAGE_SIZE < len(filtered_materials):
@@ -62,7 +61,7 @@ def show_material_list(root, show_top, header, footer):
             widget.destroy()
 
     clear_window()
-    header("材料一覧・編集")
+    header(root, "材料一覧・編集")
 
     # 検索欄をheaderの直後に表示
     search_frame = tk.Frame(root)
@@ -110,7 +109,8 @@ def show_material_list(root, show_top, header, footer):
                 # Excelに全データを保存
                 update_materials(filtered_materials)
                 show_page()  # ページ再描画
-        row['delete_btn'] = tk.Button(frame, image=delete_photo, command=delete_this, width=30, height=30, bd=0)
+        row['delete_btn'] = tk.Button(frame, image=delete_photo, command=delete_this, width=20, height=20, bd=0)
+        row['delete_btn'].image = delete_photo # 画像が解放されないように参照を保持
         row['delete_btn'].pack(side=tk.LEFT, padx=2)
         if values:
             row['name'].insert(0, values[0])
@@ -161,15 +161,7 @@ def show_material_list(root, show_top, header, footer):
     tk.Button(btn_frame, text="戻る", width=10, command=show_top).pack(side=tk.LEFT, padx=10)
     tk.Button(btn_frame, text="更新", width=10, command=update).pack(side=tk.LEFT, padx=10)
 
-    # ページング
-    paging_frame = tk.Frame(root)
-    paging_frame.pack(pady=5)
-    tk.Button(paging_frame, text="前へ", command=prev_page).pack(side=tk.LEFT)
-    page_label = tk.Label(paging_frame, text="")
-    page_label.pack(side=tk.LEFT, padx=10)
-    tk.Button(paging_frame, text="次へ", command=next_page).pack(side=tk.LEFT)
-
     # 初期表示
     show_page()
 
-    footer() 
+    footer(root) 

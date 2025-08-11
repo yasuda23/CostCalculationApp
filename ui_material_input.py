@@ -19,7 +19,7 @@ def show_material_input(root, show_top, header, footer):
             widget.destroy()
 
     clear_window()
-    header("材料登録")
+    header(root, "材料登録")
 
     label_frame = tk.Frame(root)
     label_frame.pack(pady=2)
@@ -61,6 +61,9 @@ def show_material_input(root, show_top, header, footer):
     btn_frame.pack(pady=20)
 
     def register():
+        # 登録ボタンを無効化
+        register_btn.config(state='disabled')
+
         registered = []
         for row in entry_rows:
             name = row['name'].get()
@@ -76,10 +79,24 @@ def show_material_input(root, show_top, header, footer):
                 row['total'].config(state='readonly')
         if registered:
             msg_var.set(f'"{', '.join(registered)}"をExcelへ登録しました')
+            # 入力フィールドをクリア
+            for row in entry_rows:
+                row['name'].delete(0, tk.END)
+                row['amount'].delete(0, tk.END)
+                row['price'].delete(0, tk.END)
+                row['tax'].delete(0, tk.END)
+                row['total'].config(state='normal')
+                row['total'].delete(0, tk.END)
+                row['total'].config(state='readonly')
+            # 登録ボタンを再度有効化
+            register_btn.config(state='normal')
         else:
             msg_var.set("")
+            # 登録ボタンを再度有効化 (登録する材料がない場合)
+            register_btn.config(state='normal')
 
     tk.Button(btn_frame, text="戻る", width=10, command=show_top).pack(side=tk.LEFT, padx=10)
-    tk.Button(btn_frame, text="登録", width=10, command=register).pack(side=tk.LEFT, padx=10)
+    register_btn = tk.Button(btn_frame, text="登録", width=10, command=register)
+    register_btn.pack(side=tk.LEFT, padx=10)
 
-    footer() 
+    footer(root) 
